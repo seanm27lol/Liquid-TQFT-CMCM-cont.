@@ -7,15 +7,18 @@ in one build.
 
 ## Status
 
-The repository contains nine Lean source files (approximately 2,900 lines).
+The repository contains ten Lean source files (approximately 3,500 lines).
 Everything under `RequestProject/` is sorry-free. The only proof placeholder is
 the pre-existing `qDim_tensor` lemma in `Ribbon.lean`, whose obstruction is the
 normalization of duals of tensor products. There are no custom axioms.
 
-The current source is an algebraic presentation and interpretation layer. It
-does **not** yet prove that the presentation is equivalent to the geometric
-oriented bordism category, and it does not yet construct non-compact
-Chern–Simons theory.
+The current source is an algebraic presentation and interpretation layer.
+`Cob2Monoidal.lean` equips a strengthened quotient with a lawful monoidal
+category, proves that every commutative Frobenius interpretation descends to
+it, and supplies the descended functor with a strong monoidal structure. It
+does **not** yet construct a braiding or symmetry on that quotient, prove that
+the presentation is equivalent to the geometric oriented bordism category, or
+construct non-compact Chern–Simons theory.
 
 ## Formalized components
 
@@ -29,6 +32,7 @@ Chern–Simons theory.
 | `RequestProject/SheafFullnessCounterexample.lean` | Sheaf-level non-fullness |
 | `RequestProject/EmbeddingProfile.lean` | Reflection and preservation limits of the embedding |
 | `RequestProject/Cob2.lean` | Commutative Frobenius data, presentation quotient, and ordinary induced functor |
+| `RequestProject/Cob2Monoidal.lean` | Strengthened quotient, lawful monoidal category, descended strong monoidal interpretation, and comparison with the ordinary functor |
 | `RequestProject/DijkgraafWitten.lean` | Rank-`n` diagonal Frobenius theory and torus/genus-word evaluations |
 
 The concrete theory on `Fin n → ℤ` proves that multiplication after
@@ -50,11 +54,11 @@ requests to `main`.
 
 ## Roadmap
 
-1. Strengthen the `Cob2Mor` quotient with tensor/interchange/coherence laws and
-   construct the induced strong monoidal functor.
-2. Add swap naturality, hexagons, and involutivity for a symmetric presentation.
-3. Prove connected genus normal forms before identifying the presentation with
-   geometric oriented `2Cob`.
+1. Add swap naturality, hexagons, and involutivity, then prove compatibility
+   of the descended interpretation for symmetric targets.
+2. Prove connected genus normal forms and the commutative-Frobenius universal
+   property of the presentation.
+3. Identify the completed presentation with geometric oriented `2Cob`.
 4. Instantiate normalized finite-group Dijkgraaf–Witten theories; retain the
    ribbon layer as input toward three-dimensional Reshetikhin–Turaev theory.
 
