@@ -1,5 +1,5 @@
 name = "RibbonLean"
-defaultTargets = ["Ribbon"]
+defaultTargets = ["Ribbon", "RequestProject"]
 
 [[require]]
 name = "mathlib"
@@ -9,3 +9,7 @@ rev = "v4.28.0"
 [[lean_lib]]
 name = "Ribbon"
 globs = ["Ribbon"]
+
+[[lean_lib]]
+name = "RequestProject"
+globs = ["RequestProject.+"]
