@@ -4,15 +4,21 @@ import Mathlib.CategoryTheory.Monoidal.Rigid.Braided
 /-!
 # Balanced and ribbon monoidal categories
 
-## Reconnaissance (performed before the first build of this file)
+## Mathlib rigid/braided API audit
 
-* `Mathlib.CategoryTheory.Monoidal.Braided.Basic` supplies the braiding `β_ X Y`, naturality
-  lemmas `BraidedCategory.braiding_naturality_left`, `..._right`, and `..._naturality`, the two
-  hexagon fields, and `SymmetricCategory.symmetry`.  The latter says directly that the composite
-  of the two braidings is the identity.
-* `Mathlib.CategoryTheory.Monoidal.Rigid.Basic` supplies `ExactPairing`, `HasRightDual`, the
-  notations `Xᘁ`, `η_ X Xᘁ`, and `ε_ X Xᘁ`, and the contravariant mate `fᘁ`.  In particular,
-  `rightAdjointMate_id` and `comp_rightAdjointMate` describe identities and reversed composition.
+* The zigzag identities are
+  `ExactPairing.coevaluation_evaluation` and `ExactPairing.evaluation_coevaluation`, stated with
+  explicit whiskering, associators, and unitors.  Their normalized monoidal-composition forms are
+  `coevaluation_evaluation''` and `evaluation_coevaluation''`; reassociated simp lemmas are generated
+  for the two original identities.
+* For right mates, `rightAdjointMate_id` and `comp_rightAdjointMate` give identity and reversed
+  composition.  The two naturality/absorption results needed below already exist in whiskered form:
+  `coevaluation_comp_rightAdjointMate` and `rightAdjointMate_comp_evaluation` (both `[reassoc]`).
+* Braiding naturality is available one variable at a time as
+  `BraidedCategory.braiding_naturality_left` and `..._right`, jointly in tensor-morphism form as
+  `BraidedCategory.braiding_naturality`, and likewise for inverse braidings as
+  `braiding_inv_naturality_left`, `..._right`, and `..._naturality`.  Reassociated forms are
+  generated for all of these.
 * Mathlib's existing `CategoryTheory.Balanced` is the unrelated property that every morphism which
   is both mono and epi is an isomorphism.  Searches found no declarations named
   `BalancedMonoidalCategory` or `RibbonCategory`; those collision-free names are used below.
@@ -160,21 +166,105 @@ lemma qTrace_unit : qTrace (𝟙 (𝟙_ C)) = 𝟙 (𝟙_ C) := by
     (@coevaluation_braiding_evaluation_unit C _ _ _
       (@rightDual C _ _ (𝟙_ C) i) i.exact)
 
-/-- Cyclicity of the quantum trace.  This is the single designated stretch goal.
+/-
+A morphism can be absorbed into a coevaluation on either leg, with the morphism on the
+right leg replaced by its right mate.  This tensor-morphism orientation matches `qTrace`.
+-/
+lemma coevaluation_absorption {X Y : C} (f : X ⟶ Y) :
+    η_ X Xᘁ ≫ (f ⊗ₘ 𝟙 (Xᘁ)) = η_ Y Yᘁ ≫ (𝟙 Y ⊗ₘ fᘁ) := by
+  simpa using (coevaluation_comp_rightAdjointMate f).symm
 
-The exact remaining blocking goal is the displayed equality
-`qTrace (f ≫ g) = qTrace (g ≫ f)` for arbitrary `f : X ⟶ Y` and `g : Y ⟶ X`;
-its proof requires a general braided-rigid string-diagram isotopy beyond the unit and
-definitional trace calculations established above.
+/-
+Dual evaluation absorption: a morphism can be moved from the primal leg to the dual leg as
+its right mate.
+-/
+lemma evaluation_absorption {X Y : C} (f : X ⟶ Y) :
+    (fᘁ ⊗ₘ 𝟙 X) ≫ ε_ X Xᘁ = (𝟙 (Yᘁ) ⊗ₘ f) ≫ ε_ Y Yᘁ := by
+  simpa using rightAdjointMate_comp_evaluation f
+
+/-
+The twist slides past every morphism.
+-/
+lemma twist_slide {X Y : C} (f : X ⟶ Y) :
+    f ≫ (BalancedMonoidalCategory.twist Y).hom =
+      (BalancedMonoidalCategory.twist X).hom ≫ f :=
+  BalancedMonoidalCategory.twist_naturality_hom f
+
+/-
+Coevaluation absorption, reassociated with a further tensor map.
+-/
+lemma coevaluation_absorption_tensor_assoc {X Y Z : C} (f : X ⟶ Y) (h : Y ⟶ Z)
+    (k : Z ⊗ Xᘁ ⟶ 𝟙_ C) :
+    η_ X Xᘁ ≫ ((f ≫ h) ⊗ₘ 𝟙 (Xᘁ)) ≫ k =
+      η_ Y Yᘁ ≫ (𝟙 Y ⊗ₘ fᘁ) ≫ (h ⊗ₘ 𝟙 (Xᘁ)) ≫ k := by
+  simp +decide [← Category.assoc]
+  grind +suggestions
+
+/-
+The middle, braided part of trace rotation.
+-/
+@[reassoc]
+lemma absorption_braiding {X Y : C} (f : X ⟶ Y) (h : Y ⟶ X) :
+    (𝟙 Y ⊗ₘ fᘁ) ≫ (h ⊗ₘ 𝟙 (Xᘁ)) ≫ (β_ X Xᘁ).hom =
+      (β_ Y Yᘁ).hom ≫ (fᘁ ⊗ₘ h) := by
+  rw [← Category.assoc, MonoidalCategory.tensorHom_comp_tensorHom]
+  simp only [Category.comp_id, Category.id_comp,
+    BraidedCategory.braiding_naturality]
+
+/-
+Evaluation absorption after both tensor legs have acquired morphisms.
+-/
+@[reassoc]
+lemma tensor_evaluation_absorption {X Y : C} (f : X ⟶ Y) (h : Y ⟶ X) :
+    (fᘁ ⊗ₘ h) ≫ ε_ X Xᘁ =
+      (𝟙 (Yᘁ) ⊗ₘ (h ≫ f)) ≫ ε_ Y Yᘁ := by
+  rw [MonoidalCategory.tensorHom_def']
+  grind +suggestions
+
+/-- Sliding a morphism all the way around the closed quantum-trace diagram. -/
+lemma qTrace_rotate {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X) :
+    qTrace (f ≫ g) =
+      η_ Y Yᘁ ≫ (β_ Y Yᘁ).hom ≫
+        (𝟙 (Yᘁ) ⊗ₘ (g ≫ (BalancedMonoidalCategory.twist X).hom ≫ f)) ≫ ε_ Y Yᘁ := by
+  unfold qTrace
+  simp only [Category.assoc]
+  let h : Y ⟶ X := g ≫ (BalancedMonoidalCategory.twist X).hom
+  change η_ X Xᘁ ≫ ((f ≫ h) ⊗ₘ 𝟙 (Xᘁ)) ≫
+      (β_ X Xᘁ).hom ≫ ε_ X Xᘁ = _
+  rw [coevaluation_absorption_tensor_assoc f h]
+  rw [absorption_braiding_assoc f h]
+  rw [tensor_evaluation_absorption f h]
+  simp only [h, Category.assoc]
+
+/-
+Cyclicity of the quantum trace.
 -/
 lemma qTrace_cyclic {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X) :
     qTrace (f ≫ g) = qTrace (g ≫ f) := by
-  sorry
+  rw [qTrace_rotate f g]
+  unfold qTrace
+  simp only [Category.assoc]
+  rw [BraidedCategory.braiding_naturality_assoc]
+  rw [← twist_slide f]
 
 /-- The S-pairing is the quantum trace of the double braiding on `X ⊗ Y`.
 Nondegeneracy of this pairing is the modularity condition; no such condition is imposed here.
 -/
 def sPairing (X Y : C) : 𝟙_ C ⟶ 𝟙_ C :=
   qTrace ((β_ X Y).hom ≫ (β_ Y X).hom)
+
+/-- Quantum dimension is multiplicative under tensor product.
+
+The isolated Stage 3 blocking goal is exactly this equality.  Its proof requires expanding the
+chosen right dual and exact pairing of `X ⊗ Y` and normalizing the resulting associators, braidings,
+twist tensor axiom, coevaluation, and evaluation to the composite of the two closed diagrams.
+-/
+lemma qDim_tensor (X Y : C) : qDim (X ⊗ Y) = qDim X ≫ qDim Y := by
+  sorry
+
+/-- The S-pairing is symmetric. -/
+lemma sPairing_symm (X Y : C) : sPairing X Y = sPairing Y X := by
+  unfold sPairing
+  exact qTrace_cyclic (β_ X Y).hom (β_ Y X).hom
 
 end CategoryTheory
