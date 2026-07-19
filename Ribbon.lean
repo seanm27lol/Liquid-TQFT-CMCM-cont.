@@ -253,14 +253,423 @@ Nondegeneracy of this pairing is the modularity condition; no such condition is 
 def sPairing (X Y : C) : 𝟙_ C ⟶ 𝟙_ C :=
   qTrace ((β_ X Y).hom ≫ (β_ Y X).hom)
 
-/-- Quantum dimension is multiplicative under tensor product.
+omit [BraidedCategory C] [RibbonCategory C] in
+/-- The dual-side triangle for the standard nested cup and cap. -/
+lemma tensorExactPairing_dual_triangle {X X' Y Y' : C}
+    (pX : ExactPairing X X') (pY : ExactPairing Y Y') :
+    letI : ExactPairing X X' := pX
+    letI : ExactPairing Y Y' := pY
+    (Y' ⊗ X') ◁ (η_ X X' ⊗≫ (X ◁ η_ Y Y') ▷ X' ⊗≫ 𝟙 _) ≫
+      (α_ (Y' ⊗ X') (X ⊗ Y) (Y' ⊗ X')).inv ≫
+      (𝟙 _ ⊗≫ (Y' ◁ ε_ X X') ▷ Y ⊗≫ ε_ Y Y') ▷ (Y' ⊗ X') =
+        (ρ_ (Y' ⊗ X')).hom ≫ (λ_ (Y' ⊗ X')).inv := by
+  rw [Iso.eq_comp_inv, ← Iso.inv_comp_eq_id]
+  calc
+    _ = 𝟙 (Y' ⊗ X') ⊗≫ (Y' ⊗ X') ◁ η_ X X' ⊗≫
+        (Y' ⊗ X') ◁ ((X ◁ η_ Y Y') ▷ X') ⊗≫
+        ((Y' ◁ ε_ X X') ▷ Y) ▷ (Y' ⊗ X') ⊗≫
+        ε_ Y Y' ▷ (Y' ⊗ X') ⊗≫ 𝟙 (Y' ⊗ X') := by
+      monoidal
+    _ = 𝟙 (Y' ⊗ X') ⊗≫ (Y' ⊗ X') ◁ η_ X X' ⊗≫
+        (Y' ◁ (((X' ⊗ X) ◁ η_ Y Y') ≫
+          ε_ X X' ▷ (Y ⊗ Y'))) ▷ X' ⊗≫
+        ε_ Y Y' ▷ (Y' ⊗ X') ⊗≫ 𝟙 (Y' ⊗ X') := by
+      monoidal
+    _ = 𝟙 (Y' ⊗ X') ⊗≫ (Y' ⊗ X') ◁ η_ X X' ⊗≫
+        (Y' ◁ ((ε_ X X' ▷ (𝟙_ C)) ≫
+          (𝟙_ C) ◁ η_ Y Y')) ▷ X' ⊗≫
+        ε_ Y Y' ▷ (Y' ⊗ X') ⊗≫ 𝟙 (Y' ⊗ X') := by
+      rw [whisker_exchange]
+    _ = 𝟙 (Y' ⊗ X') ⊗≫
+        Y' ◁ (X' ◁ η_ X X' ⊗≫ ε_ X X' ▷ X') ⊗≫
+        (Y' ◁ η_ Y Y' ⊗≫ ε_ Y Y' ▷ Y') ▷ X' ⊗≫
+        𝟙 (Y' ⊗ X') := by
+      monoidal
+    _ = _ := by
+      rw [ExactPairing.coevaluation_evaluation'',
+        ExactPairing.coevaluation_evaluation'']
+      monoidal
 
-The isolated Stage 3 blocking goal is exactly this equality.  Its proof requires expanding the
-chosen right dual and exact pairing of `X ⊗ Y` and normalizing the resulting associators, braidings,
-twist tensor axiom, coevaluation, and evaluation to the composite of the two closed diagrams.
+omit [BraidedCategory C] [RibbonCategory C] in
+/-- The primal-side triangle for the standard nested cup and cap. -/
+lemma tensorExactPairing_primal_triangle {X X' Y Y' : C}
+    (pX : ExactPairing X X') (pY : ExactPairing Y Y') :
+    letI : ExactPairing X X' := pX
+    letI : ExactPairing Y Y' := pY
+    (η_ X X' ⊗≫ (X ◁ η_ Y Y') ▷ X' ⊗≫ 𝟙 _) ▷ (X ⊗ Y) ≫
+      (α_ (X ⊗ Y) (Y' ⊗ X') (X ⊗ Y)).hom ≫
+      (X ⊗ Y) ◁ (𝟙 _ ⊗≫ (Y' ◁ ε_ X X') ▷ Y ⊗≫ ε_ Y Y') =
+        (λ_ (X ⊗ Y)).hom ≫ (ρ_ (X ⊗ Y)).inv := by
+  rw [Iso.eq_comp_inv, ← Iso.inv_comp_eq_id]
+  calc
+    _ = 𝟙 (X ⊗ Y) ⊗≫ η_ X X' ▷ (X ⊗ Y) ⊗≫
+        ((X ◁ η_ Y Y') ▷ X') ▷ (X ⊗ Y) ⊗≫
+        (X ⊗ Y) ◁ ((Y' ◁ ε_ X X') ▷ Y) ⊗≫
+        (X ⊗ Y) ◁ ε_ Y Y' ⊗≫ 𝟙 (X ⊗ Y) := by
+      monoidal
+    _ = 𝟙 (X ⊗ Y) ⊗≫ η_ X X' ▷ (X ⊗ Y) ⊗≫
+        (X ◁ ((η_ Y Y' ▷ (X' ⊗ X)) ≫
+          (Y ⊗ Y') ◁ ε_ X X')) ▷ Y ⊗≫
+        (X ⊗ Y) ◁ ε_ Y Y' ⊗≫ 𝟙 (X ⊗ Y) := by
+      monoidal
+    _ = 𝟙 (X ⊗ Y) ⊗≫ η_ X X' ▷ (X ⊗ Y) ⊗≫
+        (X ◁ (((𝟙_ C) ◁ ε_ X X') ≫
+          η_ Y Y' ▷ (𝟙_ C))) ▷ Y ⊗≫
+        (X ⊗ Y) ◁ ε_ Y Y' ⊗≫ 𝟙 (X ⊗ Y) := by
+      rw [← whisker_exchange]
+    _ = 𝟙 (X ⊗ Y) ⊗≫
+        (η_ X X' ▷ X ⊗≫ X ◁ ε_ X X') ▷ Y ⊗≫
+        X ◁ (η_ Y Y' ▷ Y ⊗≫ Y ◁ ε_ Y Y') ⊗≫
+        𝟙 (X ⊗ Y) := by
+      monoidal
+    _ = _ := by
+      rw [ExactPairing.evaluation_coevaluation'',
+        ExactPairing.evaluation_coevaluation'']
+      monoidal
+
+/-- The standard nested-cup/nested-cap pairing of a tensor product with the
+reverse tensor product of two chosen dual objects. -/
+def tensorExactPairing {X X' Y Y' : C}
+    (pX : ExactPairing X X') (pY : ExactPairing Y Y') :
+    ExactPairing (X ⊗ Y) (Y' ⊗ X') := by
+  letI : ExactPairing X X' := pX
+  letI : ExactPairing Y Y' := pY
+  refine
+    { coevaluation' :=
+        η_ X X' ⊗≫ (X ◁ η_ Y Y') ▷ X' ⊗≫ 𝟙 _
+      evaluation' :=
+        𝟙 _ ⊗≫ (Y' ◁ ε_ X X') ▷ Y ⊗≫ ε_ Y Y'
+      coevaluation_evaluation' := ?_
+      evaluation_coevaluation' := ?_ }
+  · exact tensorExactPairing_dual_triangle pX pY
+  · exact tensorExactPairing_primal_triangle pX pY
+
+/-- Quantum trace computed using an explicitly supplied exact pairing. -/
+def qTraceWithPairing {X D : C} (p : ExactPairing X D) (f : X ⟶ X) :
+    𝟙_ C ⟶ 𝟙_ C :=
+  letI : ExactPairing X D := p
+  η_ X D ≫ ((f ≫ (BalancedMonoidalCategory.twist X).hom) ⊗ₘ 𝟙 D) ≫
+    (β_ X D).hom ≫ ε_ X D
+
+omit [BraidedCategory C] [RibbonCategory C] in
+/-
+The canonical comparison of two right duals transports coevaluation in the expected way.
+-/
+lemma rightDualIso_coevaluation {X D₁ D₂ : C}
+    (p₁ : ExactPairing X D₁) (p₂ : ExactPairing X D₂) :
+    let i := rightDualIso p₁ p₂
+    @ExactPairing.coevaluation C _ _ X D₁ p₁ ≫ (𝟙 X ⊗ₘ i.hom) =
+      @ExactPairing.coevaluation C _ _ X D₂ p₂ := by
+  simp +decide [ rightDualIso ];
+    have := @coevaluation_comp_rightAdjointMate C _ _ X X { rightDual := D₂, exact := p₂ } { rightDual := D₁, exact := p₁ } ( 𝟙 X ) ; simp_all +decide [ Category.comp_id ] ;
+
+omit [BraidedCategory C] [RibbonCategory C] in
+/-
+The canonical comparison of two right duals transports evaluation in the expected way.
+-/
+lemma rightDualIso_evaluation {X D₁ D₂ : C}
+    (p₁ : ExactPairing X D₁) (p₂ : ExactPairing X D₂) :
+    let i := rightDualIso p₁ p₂
+    (i.hom ⊗ₘ 𝟙 X) ≫ @ExactPairing.evaluation C _ _ X D₂ p₂ =
+      @ExactPairing.evaluation C _ _ X D₁ p₁ := by
+  have := @rightAdjointMate_comp_evaluation C _ _ X X { rightDual := D₂, exact := p₂ } { rightDual := D₁, exact := p₁ } ( 𝟙 X ) ; aesop;
+
+/-
+The closed quantum trace is independent of the chosen exact right pairing.
+-/
+lemma qTraceWithPairing_eq {X D₁ D₂ : C}
+    (p₁ : ExactPairing X D₁) (p₂ : ExactPairing X D₂) (f : X ⟶ X) :
+    qTraceWithPairing p₁ f = qTraceWithPairing p₂ f := by
+  unfold qTraceWithPairing;
+  rename_i h;
+  revert h;
+  intro h
+  set i := rightDualIso p₁ p₂
+  have h_coevaluation : @ExactPairing.coevaluation C _ _ X D₁ p₁ ≫ (𝟙 X ⊗ₘ i.hom) = @ExactPairing.coevaluation C _ _ X D₂ p₂ := by
+    have := @coevaluation_comp_rightAdjointMate C _ _ X X { rightDual := D₂, exact := p₂ } { rightDual := D₁, exact := p₁ } ( 𝟙 X ) ; aesop;
+  have h_evaluation : (i.hom ⊗ₘ 𝟙 X) ≫ @ExactPairing.evaluation C _ _ X D₂ p₂ = @ExactPairing.evaluation C _ _ X D₁ p₁ := by
+    have := @rightAdjointMate_comp_evaluation C _ _ X X { rightDual := D₂, exact := p₂ } { rightDual := D₁, exact := p₁ } ( 𝟙 X ) ; aesop;
+  simp +decide [ ← h_coevaluation, ← h_evaluation ];
+  simp +decide [ ← Category.assoc, ← MonoidalCategory.whisker_exchange ];
+  simp +decide [ Category.assoc, ← MonoidalCategory.whisker_exchange ]
+
+/-- The original trace is definitionally its explicitly-paired version at the chosen right dual. -/
+lemma qTrace_eq_qTraceWithPairing {X : C} (f : X ⟶ X) :
+    qTrace f = qTraceWithPairing (inferInstance : ExactPairing X Xᘁ) f := rfl
+
+omit [RibbonCategory C] in
+/-- The balancing double braid turns the left evaluation of a tensor product into the two
+individual left evaluations. -/
+lemma braidedCap_tensor {X X' Y Y' : C}
+    (pX : ExactPairing X X') (pY : ExactPairing Y Y') :
+    letI : ExactPairing X X' := pX
+    letI : ExactPairing Y Y' := pY
+    (((β_ X Y).hom ≫ (β_ Y X).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) ≫
+        (β_ (X ⊗ Y) (Y' ⊗ X')).hom ≫
+        (𝟙 _ ⊗≫ (Y' ◁ ε_ X X') ▷ Y ⊗≫ ε_ Y Y') =
+      𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (X ◁ ((β_ Y Y').hom ≫ ε_ Y Y')) ▷ X' ⊗≫
+        ((β_ X X').hom ≫ ε_ X X') := by
+  letI : ExactPairing X X' := pX
+  letI : ExactPairing Y Y' := pY
+  calc
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (β_ X Y).hom ▷ (Y' ⊗ X') ⊗≫
+        ((β_ Y X).hom ▷ Y' ⊗≫
+          X ◁ (β_ Y Y').hom ⊗≫
+          (β_ X Y').hom ▷ Y) ▷ X' ⊗≫
+        (Y' ⊗ X) ◁ (β_ Y X').hom ⊗≫
+        Y' ◁ (β_ X X').hom ▷ Y ⊗≫
+        Y' ◁ ε_ X X' ▷ Y ⊗≫ ε_ Y Y' := by
+      simp only [BraidedCategory.braiding_tensor_left_hom,
+        BraidedCategory.braiding_tensor_right_hom]
+      monoidal
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (β_ X Y).hom ▷ (Y' ⊗ X') ⊗≫
+        (𝟙 _ ⊗≫
+          (Y ◁ (β_ X Y').hom ⊗≫
+            (β_ Y Y').hom ▷ X ⊗≫
+            Y' ◁ (β_ Y X).hom) ⊗≫ 𝟙 _) ▷ X' ⊗≫
+        (Y' ⊗ X) ◁ (β_ Y X').hom ⊗≫
+        Y' ◁ (β_ X X').hom ▷ Y ⊗≫
+        Y' ◁ ε_ X X' ▷ Y ⊗≫ ε_ Y Y' := by
+      rw [BraidedCategory.yang_baxter']
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        ((β_ X Y).hom ▷ Y' ⊗≫
+          Y ◁ (β_ X Y').hom ⊗≫
+          (β_ Y Y').hom ▷ X) ▷ X' ⊗≫
+        Y' ◁ (β_ Y X).hom ▷ X' ⊗≫
+        (Y' ⊗ X) ◁ (β_ Y X').hom ⊗≫
+        Y' ◁ (β_ X X').hom ▷ Y ⊗≫
+        Y' ◁ ε_ X X' ▷ Y ⊗≫ ε_ Y Y' := by
+      monoidal
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (𝟙 _ ⊗≫
+          (X ◁ (β_ Y Y').hom ⊗≫
+            (β_ X Y').hom ▷ Y ⊗≫
+            Y' ◁ (β_ X Y).hom) ⊗≫ 𝟙 _) ▷ X' ⊗≫
+        Y' ◁ (β_ Y X).hom ▷ X' ⊗≫
+        (Y' ⊗ X) ◁ (β_ Y X').hom ⊗≫
+        Y' ◁ (β_ X X').hom ▷ Y ⊗≫
+        Y' ◁ ε_ X X' ▷ Y ⊗≫ ε_ Y Y' := by
+      rw [BraidedCategory.yang_baxter']
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        X ◁ (β_ Y Y').hom ▷ X' ⊗≫
+        (β_ X Y').hom ▷ (Y ⊗ X') ⊗≫
+        Y' ◁ (β_ X Y).hom ▷ X' ⊗≫
+        Y' ◁ ((β_ Y X).hom ▷ X' ⊗≫
+          X ◁ (β_ Y X').hom ⊗≫
+          (β_ X X').hom ▷ Y) ⊗≫
+        Y' ◁ ε_ X X' ▷ Y ⊗≫ ε_ Y Y' := by
+      monoidal
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        X ◁ (β_ Y Y').hom ▷ X' ⊗≫
+        (β_ X Y').hom ▷ (Y ⊗ X') ⊗≫
+        Y' ◁ (β_ X Y).hom ▷ X' ⊗≫
+        Y' ◁ (𝟙 _ ⊗≫
+          (Y ◁ (β_ X X').hom ⊗≫
+            (β_ Y X').hom ▷ X ⊗≫
+            X' ◁ (β_ Y X).hom) ⊗≫ 𝟙 _) ⊗≫
+        Y' ◁ ε_ X X' ▷ Y ⊗≫ ε_ Y Y' := by
+      rw [BraidedCategory.yang_baxter']
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+        (β_ X (Y' ⊗ Y)).hom ▷ X' ⊗≫
+        (Y' ⊗ Y) ◁ (β_ X X').hom ⊗≫
+        Y' ◁ (β_ Y (X' ⊗ X)).hom ⊗≫
+        Y' ◁ (ε_ X X' ▷ Y) ⊗≫
+        ε_ Y Y' := by
+      simp only [BraidedCategory.braiding_tensor_right_hom]
+      monoidal
+    _ = _ := by
+      calc
+        _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+            (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+            (β_ X (Y' ⊗ Y)).hom ▷ X' ⊗≫
+            (Y' ⊗ Y) ◁ (β_ X X').hom ⊗≫
+            Y' ◁ ((β_ Y (X' ⊗ X)).hom ≫ ε_ X X' ▷ Y) ⊗≫
+            ε_ Y Y' := by
+          monoidal
+        _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+            (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+            (β_ X (Y' ⊗ Y)).hom ▷ X' ⊗≫
+            (Y' ⊗ Y) ◁ (β_ X X').hom ⊗≫
+            Y' ◁ (Y ◁ ε_ X X' ≫ (β_ Y (𝟙_ C)).hom) ⊗≫
+            ε_ Y Y' := by
+          rw [← BraidedCategory.braiding_naturality_right]
+        _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+            (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+            (β_ X (Y' ⊗ Y)).hom ▷ X' ⊗≫
+            ((Y' ⊗ Y) ◁ ((β_ X X').hom ≫ ε_ X X') ≫
+              ε_ Y Y' ▷ (𝟙_ C)) ⊗≫ 𝟙 (𝟙_ C) := by
+          rw [braiding_tensorUnit_right]
+          monoidal
+        _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+            (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+            (β_ X (Y' ⊗ Y)).hom ▷ X' ⊗≫
+            (ε_ Y Y' ▷ (X ⊗ X') ≫
+              (𝟙_ C) ◁ ((β_ X X').hom ≫ ε_ X X')) ⊗≫ 𝟙 (𝟙_ C) := by
+          rw [whisker_exchange]
+        _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+            (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+            ((β_ X (Y' ⊗ Y)).hom ≫ ε_ Y Y' ▷ X) ▷ X' ⊗≫
+            (β_ X X').hom ⊗≫ ε_ X X' := by
+          monoidal
+        _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+            (X ◁ (β_ Y Y').hom) ▷ X' ⊗≫
+            (X ◁ ε_ Y Y' ≫ (β_ X (𝟙_ C)).hom) ▷ X' ⊗≫
+            (β_ X X').hom ⊗≫ ε_ X X' := by
+          rw [← BraidedCategory.braiding_naturality_right]
+        _ = _ := by
+          rw [braiding_tensorUnit_right]
+          monoidal
+
+/-- The quantum evaluation of a tensor product factors through the two quantum evaluations. -/
+lemma qCap_tensor {X X' Y Y' : C}
+    (pX : ExactPairing X X') (pY : ExactPairing Y Y') :
+    letI : ExactPairing X X' := pX
+    letI : ExactPairing Y Y' := pY
+    (((BalancedMonoidalCategory.twist (X ⊗ Y)).hom ⊗ₘ 𝟙 (Y' ⊗ X')) ≫
+        (β_ (X ⊗ Y) (Y' ⊗ X')).hom ≫
+        (𝟙 _ ⊗≫ (Y' ◁ ε_ X X') ▷ Y ⊗≫ ε_ Y Y')) =
+      𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (X ◁ ((((BalancedMonoidalCategory.twist Y).hom ⊗ₘ 𝟙 Y') ≫
+          (β_ Y Y').hom ≫ ε_ Y Y'))) ▷ X' ⊗≫
+        (((BalancedMonoidalCategory.twist X).hom ⊗ₘ 𝟙 X') ≫
+          (β_ X X').hom ≫ ε_ X X') := by
+  letI : ExactPairing X X' := pX
+  letI : ExactPairing Y Y' := pY
+  rw [BalancedMonoidalCategory.twist_tensor_hom]
+  have h_tensor :
+      ((((BalancedMonoidalCategory.twist X).hom ⊗ₘ
+          (BalancedMonoidalCategory.twist Y).hom) ≫
+          (β_ X Y).hom ≫ (β_ Y X).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) =
+        (((BalancedMonoidalCategory.twist X).hom ⊗ₘ
+            (BalancedMonoidalCategory.twist Y).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) ≫
+          (((β_ X Y).hom ≫ (β_ Y X).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) := by
+    rw [MonoidalCategory.tensorHom_comp_tensorHom]
+    simp only [Category.comp_id]
+  calc
+    _ = ((((BalancedMonoidalCategory.twist X).hom ⊗ₘ
+          (BalancedMonoidalCategory.twist Y).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) ≫
+        ((((β_ X Y).hom ≫ (β_ Y X).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) ≫
+          (β_ (X ⊗ Y) (Y' ⊗ X')).hom ≫
+          (𝟙 _ ⊗≫ (Y' ◁ ε_ X X') ▷ Y ⊗≫ ε_ Y Y'))) := by
+      rw [h_tensor]
+      simp only [Category.assoc]
+    _ = (((BalancedMonoidalCategory.twist X).hom ⊗ₘ
+          (BalancedMonoidalCategory.twist Y).hom) ⊗ₘ 𝟙 (Y' ⊗ X')) ≫
+        (𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+          (X ◁ ((β_ Y Y').hom ≫ ε_ Y Y')) ▷ X' ⊗≫
+          ((β_ X X').hom ≫ ε_ X X')) := by
+      rw [braidedCap_tensor pX pY]
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        (((BalancedMonoidalCategory.twist X).hom ▷ (Y ⊗ Y') ≫
+          X ◁ ((((BalancedMonoidalCategory.twist Y).hom ⊗ₘ 𝟙 Y') ≫
+            (β_ Y Y').hom ≫ ε_ Y Y'))) ▷ X') ⊗≫
+        ((β_ X X').hom ≫ ε_ X X') := by
+      simp only [MonoidalCategory.tensorHom_def]
+      monoidal
+    _ = 𝟙 ((X ⊗ Y) ⊗ (Y' ⊗ X')) ⊗≫
+        ((X ◁ ((((BalancedMonoidalCategory.twist Y).hom ⊗ₘ 𝟙 Y') ≫
+            (β_ Y Y').hom ≫ ε_ Y Y')) ≫
+          (BalancedMonoidalCategory.twist X).hom ▷ (𝟙_ C)) ▷ X') ⊗≫
+        ((β_ X X').hom ≫ ε_ X X') := by
+      rw [whisker_exchange]
+    _ = _ := by
+      simp only [MonoidalCategory.tensorHom_def]
+      monoidal
+
+omit [RibbonCategory C] in
+/-- A scalar may be moved from the left side of an object to the right side. -/
+lemma scalar_move_right (X : C) (s : 𝟙_ C ⟶ 𝟙_ C) :
+    𝟙 ((𝟙_ C) ⊗ X) ⊗≫ s ▷ X ⊗≫ 𝟙 ((𝟙_ C) ⊗ X) =
+      𝟙 ((𝟙_ C) ⊗ X) ⊗≫ X ◁ s ⊗≫ 𝟙 ((𝟙_ C) ⊗ X) := by
+  calc
+    _ = (β_ X (𝟙_ C)).inv ≫ (β_ X (𝟙_ C)).hom ≫ s ▷ X := by
+      simp
+      monoidal
+    _ = (β_ X (𝟙_ C)).inv ≫ X ◁ s ≫ (β_ X (𝟙_ C)).hom := by
+      rw [← BraidedCategory.braiding_naturality_right]
+    _ = _ := by
+      simp only [braiding_tensorUnit_right, braiding_inv_tensorUnit_right]
+      monoidal
+
+omit [RibbonCategory C] in
+/-- A scalar inserted between two tensor factors can be moved past a map to the tensor unit. -/
+lemma middleScalar_comp {X X' : C} (s : 𝟙_ C ⟶ 𝟙_ C)
+    (f : X ⊗ X' ⟶ 𝟙_ C) :
+    𝟙 (X ⊗ X') ⊗≫ (X ◁ s) ▷ X' ⊗≫ f = f ≫ s := by
+  calc
+    _ = 𝟙 (X ⊗ X') ⊗≫
+        X ◁ (𝟙 ((𝟙_ C) ⊗ X') ⊗≫ s ▷ X' ⊗≫
+          𝟙 ((𝟙_ C) ⊗ X')) ⊗≫ f := by
+      monoidal
+    _ = 𝟙 (X ⊗ X') ⊗≫
+        X ◁ (𝟙 ((𝟙_ C) ⊗ X') ⊗≫ X' ◁ s ⊗≫
+          𝟙 ((𝟙_ C) ⊗ X')) ⊗≫ f := by
+      rw [scalar_move_right]
+    _ = 𝟙 (X ⊗ X') ⊗≫
+        ((X ⊗ X') ◁ s ≫ f ▷ (𝟙_ C)) ⊗≫ 𝟙 (𝟙_ C) := by
+      monoidal
+    _ = 𝟙 (X ⊗ X') ⊗≫
+        (f ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ s) ⊗≫ 𝟙 (𝟙_ C) := by
+      rw [whisker_exchange]
+    _ = _ := by
+      monoidal
+
+/-- Closing the standard reversed tensor pairing factors into the two individual quantum loops. -/
+lemma qTraceWithPairing_tensor_id (X Y : C) :
+    qTraceWithPairing
+        (tensorExactPairing
+          (inferInstance : ExactPairing X Xᘁ)
+          (inferInstance : ExactPairing Y Yᘁ))
+        (𝟙 (X ⊗ Y)) = qDim X ≫ qDim Y := by
+  dsimp [qTraceWithPairing, tensorExactPairing, qDim, qTrace]
+  simp only [ExactPairing.coevaluation, ExactPairing.evaluation,
+    Category.id_comp, Category.assoc]
+  calc
+    _ = (η_ X Xᘁ ⊗≫ (X ◁ η_ Y Yᘁ) ▷ Xᘁ ⊗≫
+          𝟙 ((X ⊗ Y) ⊗ (Yᘁ ⊗ Xᘁ))) ≫
+        (((BalancedMonoidalCategory.twist (X ⊗ Y)).hom ⊗ₘ
+            𝟙 (Yᘁ ⊗ Xᘁ)) ≫
+          (β_ (X ⊗ Y) (Yᘁ ⊗ Xᘁ)).hom ≫
+          (𝟙 ((Yᘁ ⊗ Xᘁ) ⊗ (X ⊗ Y)) ⊗≫
+            (Yᘁ ◁ ε_ X Xᘁ) ▷ Y ⊗≫ ε_ Y Yᘁ)) := by
+      rfl
+    _ = η_ X Xᘁ ⊗≫ (X ◁ η_ Y Yᘁ) ▷ Xᘁ ⊗≫
+        (𝟙 ((X ⊗ Y) ⊗ (Yᘁ ⊗ Xᘁ)) ⊗≫
+          (X ◁ ((((BalancedMonoidalCategory.twist Y).hom ⊗ₘ 𝟙 Yᘁ) ≫
+            (β_ Y Yᘁ).hom ≫ ε_ Y Yᘁ))) ▷ Xᘁ ⊗≫
+          (((BalancedMonoidalCategory.twist X).hom ⊗ₘ 𝟙 Xᘁ) ≫
+            (β_ X Xᘁ).hom ≫ ε_ X Xᘁ)) := by
+      rw [qCap_tensor
+        (inferInstance : ExactPairing X Xᘁ)
+        (inferInstance : ExactPairing Y Yᘁ)]
+      monoidal
+    _ = η_ X Xᘁ ≫
+        (𝟙 (X ⊗ Xᘁ) ⊗≫
+          (X ◁ (η_ Y Yᘁ ≫
+            (((BalancedMonoidalCategory.twist Y).hom ⊗ₘ 𝟙 Yᘁ) ≫
+              (β_ Y Yᘁ).hom ≫ ε_ Y Yᘁ))) ▷ Xᘁ ⊗≫
+          (((BalancedMonoidalCategory.twist X).hom ⊗ₘ 𝟙 Xᘁ) ≫
+            (β_ X Xᘁ).hom ≫ ε_ X Xᘁ)) := by
+      monoidal
+    _ = _ := by
+      rw [middleScalar_comp]
+      simp only [Category.assoc]
+      rfl
+
+/-
+Quantum dimension is multiplicative under tensor product.
 -/
 lemma qDim_tensor (X Y : C) : qDim (X ⊗ Y) = qDim X ≫ qDim Y := by
-  sorry
+  rename_i h;
+  have := @qTraceWithPairing_eq C _ _ _ h;
+  have := @qTraceWithPairing_tensor_id C _ _ _ h;
+  convert this X Y using 1;
+  rename_i h';
+  convert h' _ _ _ using 1
 
 /-- The S-pairing is symmetric. -/
 lemma sPairing_symm (X Y : C) : sPairing X Y = sPairing Y X := by
