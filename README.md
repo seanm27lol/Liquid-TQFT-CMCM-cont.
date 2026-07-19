@@ -7,15 +7,17 @@ finite-state theory, and ribbon-category input layer in one build.
 
 ## Status
 
-**Sorry-free.** 11 Lean source files, approximately 4,500 lines, no executable
-`sorry` or `admit` placeholders, and no custom axioms. Every listed formal
-result is machine-checked.
+**Proof-placeholder-free.** 12 Lean source files, approximately 4,700 lines,
+no executable proof-admission placeholders, and no custom axioms. Every listed
+formal result is machine-checked.
 
 Recent milestones close two earlier gaps:
 
 - `Cob2Symmetric.lean` constructs a symmetric monoidal algebraic source and a
   strong braided monoidal interpretation for every commutative Frobenius datum
   in a symmetric target.
+- `DijkgraafWittenSymmetric.lean` transports the diagonal torus and genus-word
+  computations through the symmetric quotient and its packaged theory.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -35,6 +37,7 @@ Recent milestones close two earlier gaps:
 | `RequestProject/Cob2Monoidal.lean` | Lawful monoidal quotient and strong monoidal interpretation |
 | `RequestProject/Cob2Symmetric.lean` | Symmetric quotient and strong braided monoidal interpretation |
 | `RequestProject/DijkgraafWitten.lean` | Rank-`n` diagonal Frobenius theory and torus/genus-word evaluations |
+| `RequestProject/DijkgraafWittenSymmetric.lean` | Base-to-symmetric functor bridge and transported torus/genus evaluations |
 
 ## Headline results
 
@@ -46,7 +49,7 @@ Recent milestones close two earlier gaps:
   braided monoidal functor.
 - On `Fin n -> ℤ`, the diagonal Frobenius datum evaluates the torus and every
   connected genus word in the defined family as multiplication by `n` on the
-  monoidal unit.
+  monoidal unit; those equalities persist through the packaged symmetric theory.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -74,8 +77,8 @@ requests to `main`.
 
 ## Roadmap
 
-1. Transport the diagonal surface-word evaluations explicitly through the
-   symmetric quotient and prove connected normal forms.
+1. Compute disconnected tensor products of the transported closed classes and
+   prove connected normal forms.
 2. Prove the symmetric quotient's commutative-Frobenius universal property.
 3. Construct geometric oriented `2Cob` and identify it with the algebraic source.
 4. Develop modular tensor category and surgery/Kirby-move infrastructure on top
