@@ -86,7 +86,7 @@ requests to `main`.
 ## Paper
 
 The accompanying paper and synchronized source snapshot are maintained at
-[`Liquid-tft-lean-CM4CM-`](https://github.com/seanm27lol/Liquid-tft-lean-CM4CM-).
+[`Liquid-TQFT-lean-CMCM`](https://github.com/seanm27lol/Liquid-TQFT-lean-CMCM).
 
 ## Attribution
 
