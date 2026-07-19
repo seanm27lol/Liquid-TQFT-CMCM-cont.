@@ -67,17 +67,17 @@ end CommFrobeniusData
 
 namespace DijkgraafWitten
 
-/-- The rank-`n` diagonal Frobenius datum as a packaged symmetric algebraic theory. -/
+/-- The rank-`n` diagonal datum in the `TQFT2d` package over the symmetric quotient. -/
 noncomputable def frobZnSymmetricTQFT (n : ℕ) :
     TQFT2d Cob2SymmetricObj (ModuleCat ℤ) :=
   (frobZn n).toSymmetricTQFT2d
 
-/-- The torus class transported from the original quotient to the symmetric quotient. -/
+/-- The torus presentation class transported from the original to the symmetric quotient. -/
 def symmetricTorus :
     (⟨0⟩ : Cob2SymmetricObj) ⟶ (⟨0⟩ : Cob2SymmetricObj) :=
   Cob2.toSymmetricQuotient.map torus
 
-/-- The connected genus-`g` class transported to the symmetric quotient. -/
+/-- The connected genus-`g` presentation class transported to the symmetric quotient. -/
 def symmetricGenus (g : ℕ) :
     (⟨0⟩ : Cob2SymmetricObj) ⟶ (⟨0⟩ : Cob2SymmetricObj) :=
   Cob2.toSymmetricQuotient.map (⟦genusWord g⟧ : Cob2Hom 0 0)
@@ -111,7 +111,7 @@ theorem Z_torus_symmetric_eq_smul_id (n : ℕ) :
     (n : ℤ) • 𝟙 (𝟙_ (ModuleCat ℤ))
   exact Z_torus_eq_smul_id n
 
-/-- Every symmetric connected genus class acts by multiplication by `n`. -/
+/-- Every transported genus class in the defined family acts by multiplication by `n`. -/
 theorem Z_genus_symmetric_eq_smul_id (n g : ℕ) :
     (frobZnSymmetricTQFT n).Z.map (symmetricGenus g) =
       (n : ℤ) • 𝟙 (𝟙_ (ModuleCat ℤ)) := by
@@ -119,7 +119,7 @@ theorem Z_genus_symmetric_eq_smul_id (n g : ℕ) :
     (n : ℤ) • 𝟙 (𝟙_ (ModuleCat ℤ))
   exact Z_genus_eq_smul_id n g
 
-/-- Evaluation of the symmetric torus partition function at `1` is `n`. -/
+/-- The underlying module morphism for the symmetric torus evaluates at `1` to `n`. -/
 theorem Z_torus_symmetric (n : ℕ) :
     ((frobZnSymmetricTQFT n).Z.map symmetricTorus).hom
         ((1 : ℤ) : 𝟙_ (ModuleCat ℤ)) =
@@ -127,7 +127,7 @@ theorem Z_torus_symmetric (n : ℕ) :
   change (frobZn n).interpret torusWord (1 : ℤ) = (n : ℤ)
   exact Z_torus n
 
-/-- Evaluation of every symmetric connected genus partition function at `1` is `n`. -/
+/-- The module morphism for each transported genus class evaluates at `1` to `n`. -/
 theorem Z_genus_symmetric (n g : ℕ) :
     ((frobZnSymmetricTQFT n).Z.map (symmetricGenus g)).hom
         ((1 : ℤ) : 𝟙_ (ModuleCat ℤ)) =
