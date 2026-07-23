@@ -7,7 +7,7 @@ finite-state theory, and ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 12 Lean source files, approximately 4,700 lines,
+**Proof-placeholder-free.** 13 Lean source files, approximately 4,800 lines,
 no executable proof-admission placeholders, and no custom axioms. Every listed
 formal result is machine-checked.
 
@@ -18,6 +18,8 @@ Recent milestones close two earlier gaps:
   in a symmetric target.
 - `DijkgraafWittenSymmetric.lean` transports the diagonal torus and genus-word
   computations through the symmetric quotient and its packaged theory.
+- `DijkgraafWittenDisconnected.lean` evaluates specified finite tensor products
+  of connected genus words: `k` components contribute the scalar `n ^ k`.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -38,6 +40,7 @@ Recent milestones close two earlier gaps:
 | `RequestProject/Cob2Symmetric.lean` | Symmetric quotient and strong braided monoidal interpretation |
 | `RequestProject/DijkgraafWitten.lean` | Rank-`n` diagonal Frobenius theory and torus/genus-word evaluations |
 | `RequestProject/DijkgraafWittenSymmetric.lean` | Base-to-symmetric functor bridge and transported torus/genus evaluations |
+| `RequestProject/DijkgraafWittenDisconnected.lean` | Disconnected genus-list evaluations through the packaged symmetric theory |
 
 ## Headline results
 
@@ -49,7 +52,9 @@ Recent milestones close two earlier gaps:
   braided monoidal functor.
 - On `Fin n -> ℤ`, the diagonal Frobenius datum evaluates the torus and every
   connected genus word in the defined family as multiplication by `n` on the
-  monoidal unit; those equalities persist through the packaged symmetric theory.
+  monoidal unit; a specified tensor product of `k` such closed words evaluates
+  as multiplication by `n ^ k`. These equalities persist through the packaged
+  symmetric theory.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -77,8 +82,7 @@ requests to `main`.
 
 ## Roadmap
 
-1. Compute disconnected tensor products of the transported closed classes and
-   prove connected normal forms.
+1. Prove connected normal forms in the symmetric algebraic source.
 2. Prove the symmetric quotient's commutative-Frobenius universal property.
 3. Construct geometric oriented `2Cob` and identify it with the algebraic source.
 4. Develop modular tensor category and surgery/Kirby-move infrastructure on top
