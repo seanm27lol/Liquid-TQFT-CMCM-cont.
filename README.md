@@ -9,7 +9,7 @@ substrate, and the ribbon-category input layer in one build.
 ## Status
 
 **Proof-placeholder-free.** 33 Lean source files—32 under `RequestProject`
-plus `Ribbon.lean`—and 12,776 lines, with no executable proof-admission
+plus `Ribbon.lean`—and 12,777 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
