@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 33 Lean source files—32 under `RequestProject`
-plus `Ribbon.lean`—and 12,777 lines, with no executable proof-admission
+**Proof-placeholder-free.** 38 Lean source files—37 under `RequestProject`
+plus `Ribbon.lean`—and 14,763 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -40,13 +40,17 @@ cobordisms:
 - `Cob2SurfaceMonoidal.lean` packages disjoint union as a bifunctor and proves
   interchange, identity preservation, and transported associativity;
   `Cob2SurfaceMonoidalCoherence.lean` proves the transported left and right
-  unit equations. No `MonoidalCategory` or `SymmetricCategory` instance is
-  claimed for this category.
+  unit equations. `Cob2SurfaceWiring.lean` verifies boundary-reindexing
+  cylinders, and `Cob2SurfaceSymmetric.lean` packages these data as a lawful
+  symmetric monoidal structure on `SurfaceNFObj`.
 - `Cob2SurfaceSignature.lean` defines the component-and-genus signature of
   every raw presentation word, proves all original Frobenius relations sound,
-  and descends it to an ordinary functor. `Cob2ConnectedReification.lean`
-  reifies every canonical connected code by an ordered spider and proves
-  injectivity of its genus parameter.
+  and descends it to an ordinary functor.
+  `Cob2SurfaceSignatureSymmetric.lean` proves soundness for the strengthened
+  monoidal and symmetric relations and packages the descended signature as a
+  strong braided monoidal functor. `Cob2ConnectedReification.lean` reifies
+  every canonical connected code by an ordered spider and proves injectivity
+  of its genus parameter.
 - `Cob2Universal.lean` constructs functors in both directions between
   commutative Frobenius data and strong braided functors out of the algebraic
   source. `Cob2UniversalEquivalence.lean` proves that evaluation after
@@ -57,6 +61,15 @@ cobordisms:
   computations through the symmetric quotient and its packaged theory.
 - `DijkgraafWittenDisconnected.lean` evaluates specified finite tensor products
   of connected genus words: `k` components contribute the scalar `n ^ k`.
+- `FiniteDiagonalFrobenius.lean` generalizes the diagonal theory to every
+  finite label type over a commutative ring, proves that connected genus words
+  evaluate by the label cardinality, and turns label permutations into
+  Frobenius and interpreted-theory isomorphisms.
+- `Cob2OrdinaryShadow.lean` gives a conditional comparison interface: supplied
+  strong braided monoidal source, sector, and decategorification functors
+  compose to an ordinary theory whose generator carries a reconstructed
+  commutative Frobenius datum. It constructs none of the geometric-Langlands
+  comparison functors itself.
 - `Cob2GeometricPrelude.lean` bundles compact smooth one-manifolds, compact
   smooth surfaces with boundary, and smooth boundary parametrizations, and
   computes the model boundary of a cylinder carrier. This prelude is
@@ -93,7 +106,10 @@ cobordisms:
 | `RequestProject/Cob2SurfaceCategory.lean` | Unit and associativity laws for graph gluing and the `SurfaceNFObj` category |
 | `RequestProject/Cob2SurfaceMonoidal.lean` | Disjoint-union bifunctor, interchange, identity preservation, and transported associativity |
 | `RequestProject/Cob2SurfaceMonoidalCoherence.lean` | Transported left and right unit equations for disjoint union |
+| `RequestProject/Cob2SurfaceWiring.lean` | Boundary-reindexing cylinder wirings and compatibility with graph gluing |
+| `RequestProject/Cob2SurfaceSymmetric.lean` | Lawful monoidal and symmetric structures on `SurfaceNFObj` |
 | `RequestProject/Cob2SurfaceSignature.lean` | Signature of every raw presentation word and its descent to an ordinary functor |
+| `RequestProject/Cob2SurfaceSignatureSymmetric.lean` | Symmetric-relation soundness and strong braided monoidal signature semantics |
 | `RequestProject/Cob2ConnectedReification.lean` | Connected spider signatures, reification, and genus injectivity |
 | `RequestProject/Cob2Universal.lean` | Evaluation and interpretation functors for Frobenius data |
 | `RequestProject/Cob2UniversalEquivalence.lean` | One reconstruction triangle and the converse objectwise comparison |
@@ -101,6 +117,8 @@ cobordisms:
 | `RequestProject/DijkgraafWitten.lean` | Rank-`n` diagonal Frobenius theory and torus/genus-word evaluations |
 | `RequestProject/DijkgraafWittenSymmetric.lean` | Base-to-symmetric functor bridge and transported torus/genus evaluations |
 | `RequestProject/DijkgraafWittenDisconnected.lean` | Disconnected genus-list evaluations through the packaged symmetric theory |
+| `RequestProject/FiniteDiagonalFrobenius.lean` | Finite-label diagonal Frobenius data, cardinality evaluations, and relabeling isomorphisms |
+| `RequestProject/Cob2OrdinaryShadow.lean` | Conditional ordinary-shadow composition and Frobenius reconstruction interface |
 | `RequestProject/Cob2GeometricPrelude.lean` | Unoriented smooth one-manifolds, surfaces with boundary, boundary parametrizations, and cylinder carrier |
 
 ## Headline results
@@ -124,17 +142,21 @@ cobordisms:
 - Every finite permutation of a boundary `Fin n` has a represented adjacent-
   swap word, and a chosen representative is absorbed on either or both sides
   of every ordered connected spider.
-- Component-and-genus normal forms form a genuine category under graph
-  gluing. Disjoint union is a bifunctor satisfying verified interchange,
-  identity, associativity, and unit equations. Every presentation word has a
-  functorial normal-form signature, and every canonical connected normal form
-  is represented by an ordered spider; at fixed arities its genus parameter
-  is injective.
+- Component-and-genus normal forms form a genuine symmetric monoidal category
+  under graph gluing and disjoint union. Every presentation word has a
+  functorial normal-form signature; the signature respects the strengthened
+  symmetric quotient and is strong braided monoidal. Every canonical
+  connected normal form is represented by an ordered spider; at fixed arities
+  its genus parameter is injective.
 - On `Fin n -> ℤ`, the diagonal Frobenius datum evaluates the torus and every
   connected genus word in the defined family as multiplication by `n` on the
   monoidal unit; a specified tensor product of `k` such closed words evaluates
   as multiplication by `n ^ k`. These equalities persist through the packaged
   symmetric theory.
+- More generally, the diagonal datum on `ι → R` for a finite label type `ι`
+  evaluates the same connected genus family by `Fintype.card ι`, and every
+  permutation of `ι` induces an isomorphism of its Frobenius datum and
+  interpreted algebraic theory.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -152,10 +174,10 @@ cobordisms:
   only the canonical connected codes are reified here. No arbitrary-word
   spider normal-form/completeness theorem or equivalence between
   `Cob2SymmetricObj` and `SurfaceNFObj` is claimed.
-- Disjoint union on `SurfaceNFObj` is a verified bifunctor with associativity
-  and unit equations, but no `MonoidalCategory` or `SymmetricCategory`
-  instance, pentagon/triangle package, or symmetric braiding has yet been
-  constructed.
+- The symmetric surface signature is a semantics functor from the algebraic
+  presentation to finite component/genus normal forms. It is not yet proved
+  full, faithful, essentially surjective, or an equivalence, and it does not
+  supply arbitrary-word normal-form completeness or uniqueness.
 - The geometric prelude is unoriented and describes individual parametrized
   smooth surfaces only. It has no orientation data, collars, smooth gluing,
   identity/composition laws, diffeomorphism quotient, geometric bordism
@@ -163,6 +185,10 @@ cobordisms:
   source.
 - The diagonal model is a finite-state Frobenius toy theory, not the conventional
   finite-group Dijkgraaf-Witten state-sum construction.
+- The ordinary-shadow bridge is conditional data and reconstruction. It does
+  not construct factorization homology, character stacks, quantum groups,
+  twisted sheaf categories, or a quantum geometric Langlands/Fourier--Mukai
+  equivalence.
 - The ribbon layer does not construct a modular tensor category, surgery theory,
   Kirby-move invariant, or Reshetikhin-Turaev TQFT.
 
@@ -178,19 +204,19 @@ requests to `main`.
 
 ## Roadmap
 
-1. Bundle the verified disjoint-union equations into monoidal and symmetric
-   structure on `SurfaceNFObj`, including the required transported naturality,
-   pentagon, triangle, and braiding coherence.
-2. Prove representation independence for finite boundary permutations and an
-   arbitrary-word normal-form/completeness theorem, then compare the symmetric
-   presentation with the surface-normal-form category.
-3. Add orientation, induced boundary orientation, boundary submanifolds, and
+1. Prove representation independence for finite boundary permutations and an
+   arbitrary-word normal-form/completeness theorem, then determine whether the
+   strong braided surface-signature functor is an equivalence.
+2. Add orientation, induced boundary orientation, boundary submanifolds, and
    collar data to the geometric substrate.
-4. Construct smooth gluing, identity cylinders, composition up to
+3. Construct smooth gluing, identity cylinders, composition up to
    diffeomorphism, and symmetric disjoint union for a geometric oriented
    `2Cob`, then prove its comparison with the algebraic/combinatorial source.
-5. Develop modular tensor category and surgery/Kirby-move infrastructure on top
+4. Develop modular tensor category and surgery/Kirby-move infrastructure on top
    of the ribbon layer.
+5. Construct the categorified inputs required by the ordinary-shadow
+   interface—such as selected factorization-homology sectors and explicit
+   decategorification functors—before making any Langlands comparison claim.
 6. Connect suitable liquid or nuclear targets to rigorously constructed
    infinite-dimensional field theories.
 
