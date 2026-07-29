@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 40 Lean source files—39 under `RequestProject`
-plus `Ribbon.lean`—and 15,082 lines, with no executable proof-admission
+**Proof-placeholder-free.** 41 Lean source files—40 under `RequestProject`
+plus `Ribbon.lean`—and 15,275 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -81,6 +81,13 @@ cobordisms:
   \(M\times[0,1]\) are smooth, immersive, topologically embedded, and cover
   exactly the model boundary, then packages the resulting
   boundary-parametrized smooth cylinder cobordism.
+- `Cob2GeometricBoundaryCollar.lean` promotes every stored boundary
+  parametrization to a homeomorphism onto the model boundary, packages
+  genuine smooth collar-neighborhood data, proves that a collar image
+  contains a neighborhood of each boundary point, and freezes the
+  boundary-first/inward-normal convention with reversed incoming and retained
+  outgoing orientations. Collar existence and an explicit cylinder collar
+  are not asserted.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -129,6 +136,7 @@ cobordisms:
 | `RequestProject/Cob2GeometricPrelude.lean` | Unoriented smooth one-manifolds, surfaces with boundary, boundary parametrizations, and cylinder carrier |
 | `RequestProject/Cob2OrientedGeometricPrelude.lean` | Locally compatible tangent orientations, reversal, diffeomorphism preservation, and oriented carriers |
 | `RequestProject/Cob2GeometricCylinder.lean` | Smooth embedded endpoint parametrization and packaged boundary-parametrized cylinder cobordism |
+| `RequestProject/Cob2GeometricBoundaryCollar.lean` | Boundary homeomorphism, smooth collar data, boundary-neighborhood theorem, and oriented incoming/outgoing compatibility |
 
 ## Headline results
 
@@ -170,7 +178,10 @@ cobordisms:
   orientations compatible in local tangent-bundle trivializations. For every
   stored closed smooth one-manifold \(M\), the two endpoint inclusions into
   \(M\times[0,1]\) form a smooth manifold embedding onto the model boundary
-  and define `cylinderCobordism M`.
+  and define `cylinderCobordism M`. Every stored boundary parametrization is
+  also a homeomorphism onto the boundary subtype; a chosen smooth collar is a
+  genuine boundary neighborhood, and its differential can be required to
+  implement the reversed-incoming/retained-outgoing orientation convention.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -192,13 +203,16 @@ cobordisms:
   presentation to finite component/genus normal forms. It is not yet proved
   full, faithful, essentially surjective, or an equivalence, and it does not
   supply arbitrary-word normal-form completeness or uniqueness.
-- The geometric layer now has locally compatible tangent orientations and a
-  verified boundary-parametrized cylinder. It does not yet construct the
-  boundary as a manifold with its induced orientation, distinguish incoming
-  reversal from outgoing preservation, provide collars or smooth gluing,
-  prove the cylinder is an identity for a composition law, form a
-  diffeomorphism quotient or geometric bordism category, classify surfaces,
-  or compare the geometric source with the algebraic source.
+- The geometric layer now has locally compatible tangent orientations, a
+  verified boundary-parametrized cylinder, a topological boundary
+  homeomorphism, bundled smooth collar data, and an explicit
+  reversed-incoming/retained-outgoing orientation-compatibility predicate. It
+  does not equip the boundary subtype with a smooth-manifold structure, prove
+  that every surface admits the bundled collar, construct a collar for the
+  cylinder, provide smooth gluing, prove the cylinder is an identity for a
+  composition law, form a diffeomorphism quotient or geometric bordism
+  category, classify surfaces, or compare the geometric source with the
+  algebraic source.
 - The diagonal model is a finite-state Frobenius toy theory, not the conventional
   finite-group Dijkgraaf-Witten state-sum construction.
 - The ordinary-shadow bridge is conditional data and reconstruction. It does
@@ -223,10 +237,11 @@ requests to `main`.
 1. Prove representation independence for finite boundary permutations and an
    arbitrary-word normal-form/completeness theorem, then determine whether the
    strong braided surface-signature functor is an equivalence.
-2. Build the boundary-submanifold, induced boundary-orientation, and collar
-   APIs needed to relate the new tangent orientations to parametrized
-   incoming and outgoing boundaries.
-3. Construct smooth gluing, prove the verified cylinder is an identity, define
+2. Prove the interval affine-map smooth/local-diffeomorphism lemmas needed for
+   an explicit two-ended collar of the verified cylinder, then investigate
+   collar existence beyond the bundled-data interface.
+3. Construct smooth gluing from chosen compatible collars, prove the verified
+   cylinder is an identity, define
    composition up to diffeomorphism and symmetric disjoint union for a
    geometric oriented `2Cob`, then prove its comparison with the
    algebraic/combinatorial source.
