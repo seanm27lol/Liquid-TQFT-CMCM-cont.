@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 38 Lean source files—37 under `RequestProject`
-plus `Ribbon.lean`—and 14,763 lines, with no executable proof-admission
+**Proof-placeholder-free.** 40 Lean source files—39 under `RequestProject`
+plus `Ribbon.lean`—and 15,082 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -72,8 +72,15 @@ cobordisms:
   comparison functors itself.
 - `Cob2GeometricPrelude.lean` bundles compact smooth one-manifolds, compact
   smooth surfaces with boundary, and smooth boundary parametrizations, and
-  computes the model boundary of a cylinder carrier. This prelude is
-  deliberately unoriented and does not define geometric composition.
+  computes the model boundary of a cylinder carrier.
+- `Cob2OrientedGeometricPrelude.lean` defines smooth tangent orientations as
+  locally compatible fields in tangent-bundle trivializations, proves
+  reversal involutive, records preservation under diffeomorphisms, and
+  packages oriented one-manifold and surface carriers.
+- `Cob2GeometricCylinder.lean` proves that the two endpoint inclusions into
+  \(M\times[0,1]\) are smooth, immersive, topologically embedded, and cover
+  exactly the model boundary, then packages the resulting
+  boundary-parametrized smooth cylinder cobordism.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -120,6 +127,8 @@ cobordisms:
 | `RequestProject/FiniteDiagonalFrobenius.lean` | Finite-label diagonal Frobenius data, cardinality evaluations, and relabeling isomorphisms |
 | `RequestProject/Cob2OrdinaryShadow.lean` | Conditional ordinary-shadow composition and Frobenius reconstruction interface |
 | `RequestProject/Cob2GeometricPrelude.lean` | Unoriented smooth one-manifolds, surfaces with boundary, boundary parametrizations, and cylinder carrier |
+| `RequestProject/Cob2OrientedGeometricPrelude.lean` | Locally compatible tangent orientations, reversal, diffeomorphism preservation, and oriented carriers |
+| `RequestProject/Cob2GeometricCylinder.lean` | Smooth embedded endpoint parametrization and packaged boundary-parametrized cylinder cobordism |
 
 ## Headline results
 
@@ -157,6 +166,11 @@ cobordisms:
   evaluates the same connected genus family by `Fintype.card ι`, and every
   permutation of `ι` induces an isomorphism of its Frobenius datum and
   interpreted algebraic theory.
+- Smooth tangent orientations are represented by pointwise module
+  orientations compatible in local tangent-bundle trivializations. For every
+  stored closed smooth one-manifold \(M\), the two endpoint inclusions into
+  \(M\times[0,1]\) form a smooth manifold embedding onto the model boundary
+  and define `cylinderCobordism M`.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -178,11 +192,13 @@ cobordisms:
   presentation to finite component/genus normal forms. It is not yet proved
   full, faithful, essentially surjective, or an equivalence, and it does not
   supply arbitrary-word normal-form completeness or uniqueness.
-- The geometric prelude is unoriented and describes individual parametrized
-  smooth surfaces only. It has no orientation data, collars, smooth gluing,
-  identity/composition laws, diffeomorphism quotient, geometric bordism
-  category, surface-classification theorem, or comparison with the algebraic
-  source.
+- The geometric layer now has locally compatible tangent orientations and a
+  verified boundary-parametrized cylinder. It does not yet construct the
+  boundary as a manifold with its induced orientation, distinguish incoming
+  reversal from outgoing preservation, provide collars or smooth gluing,
+  prove the cylinder is an identity for a composition law, form a
+  diffeomorphism quotient or geometric bordism category, classify surfaces,
+  or compare the geometric source with the algebraic source.
 - The diagonal model is a finite-state Frobenius toy theory, not the conventional
   finite-group Dijkgraaf-Witten state-sum construction.
 - The ordinary-shadow bridge is conditional data and reconstruction. It does
@@ -207,11 +223,13 @@ requests to `main`.
 1. Prove representation independence for finite boundary permutations and an
    arbitrary-word normal-form/completeness theorem, then determine whether the
    strong braided surface-signature functor is an equivalence.
-2. Add orientation, induced boundary orientation, boundary submanifolds, and
-   collar data to the geometric substrate.
-3. Construct smooth gluing, identity cylinders, composition up to
-   diffeomorphism, and symmetric disjoint union for a geometric oriented
-   `2Cob`, then prove its comparison with the algebraic/combinatorial source.
+2. Build the boundary-submanifold, induced boundary-orientation, and collar
+   APIs needed to relate the new tangent orientations to parametrized
+   incoming and outgoing boundaries.
+3. Construct smooth gluing, prove the verified cylinder is an identity, define
+   composition up to diffeomorphism and symmetric disjoint union for a
+   geometric oriented `2Cob`, then prove its comparison with the
+   algebraic/combinatorial source.
 4. Develop modular tensor category and surgery/Kirby-move infrastructure on top
    of the ribbon layer.
 5. Construct the categorified inputs required by the ordinary-shadow
