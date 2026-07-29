@@ -88,6 +88,13 @@ cobordisms:
   boundary-first/inward-normal convention with reversed incoming and retained
   outgoing orientations. Collar existence and an explicit cylinder collar
   are not asserted.
+- `Cob2GeometricTopologicalGluing.lean` glues two chosen-collared oriented
+  cobordisms along their common parametrized boundary by a `TopCat` pushout.
+  It proves injectivity of both piece maps, characterizes every cross-piece
+  identification by a unique seam point, preserves an injective outer
+  boundary, proves compactness and the pushout universal property, and checks
+  collar-zero and orientation cancellation on the seam. No smooth structure
+  on the pushout is asserted.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -137,6 +144,7 @@ cobordisms:
 | `RequestProject/Cob2OrientedGeometricPrelude.lean` | Locally compatible tangent orientations, reversal, diffeomorphism preservation, and oriented carriers |
 | `RequestProject/Cob2GeometricCylinder.lean` | Smooth embedded endpoint parametrization and packaged boundary-parametrized cylinder cobordism |
 | `RequestProject/Cob2GeometricBoundaryCollar.lean` | Boundary homeomorphism, smooth collar data, boundary-neighborhood theorem, and oriented incoming/outgoing compatibility |
+| `RequestProject/Cob2GeometricTopologicalGluing.lean` | Compact topological pushout, exact seam identifications, outer boundary, universal descent, and collar/orientation seam compatibility |
 
 ## Headline results
 
@@ -182,6 +190,10 @@ cobordisms:
   also a homeomorphism onto the boundary subtype; a chosen smooth collar is a
   genuine boundary neighborhood, and its differential can be required to
   implement the reversed-incoming/retained-outgoing orientation convention.
+  Two such compatible pieces have a canonical compact topological pushout:
+  the piece maps and unglued outer boundary are injective, and a left point
+  equals a right point exactly when both come from the same parametrized seam
+  point.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -207,10 +219,13 @@ cobordisms:
   verified boundary-parametrized cylinder, a topological boundary
   homeomorphism, bundled smooth collar data, and an explicit
   reversed-incoming/retained-outgoing orientation-compatibility predicate. It
-  does not equip the boundary subtype with a smooth-manifold structure, prove
-  that every surface admits the bundled collar, construct a collar for the
-  cylinder, provide smooth gluing, prove the cylinder is an identity for a
-  composition law, form a diffeomorphism quotient or geometric bordism
+  also has the compact topological pushout of two chosen-collared pieces, with
+  exact control of its seam and outer-boundary identifications. It does not
+  equip the boundary subtype or pushout with the missing smooth-manifold
+  structure, prove that every surface admits the bundled collar, construct a
+  collar for the cylinder, prove Hausdorffness or local Euclidean structure
+  of the pushout, provide smooth gluing, prove the cylinder is an identity for
+  a composition law, form a diffeomorphism quotient or geometric bordism
   category, classify surfaces, or compare the geometric source with the
   algebraic source.
 - The diagonal model is a finite-state Frobenius toy theory, not the conventional
@@ -240,8 +255,9 @@ requests to `main`.
 2. Prove the interval affine-map smooth/local-diffeomorphism lemmas needed for
    an explicit two-ended collar of the verified cylinder, then investigate
    collar existence beyond the bundled-data interface.
-3. Construct smooth gluing from chosen compatible collars, prove the verified
-   cylinder is an identity, define
+3. Upgrade the verified compact topological seam pushout to a Hausdorff,
+   second-countable smooth surface with boundary using the chosen compatible
+   collars; prove the verified cylinder is an identity, then define
    composition up to diffeomorphism and symmetric disjoint union for a
    geometric oriented `2Cob`, then prove its comparison with the
    algebraic/combinatorial source.
