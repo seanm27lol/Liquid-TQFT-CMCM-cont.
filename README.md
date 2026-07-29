@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 41 Lean source files—40 under `RequestProject`
-plus `Ribbon.lean`—and 15,275 lines, with no executable proof-admission
+**Proof-placeholder-free.** 43 Lean source files—42 under `RequestProject`
+plus `Ribbon.lean`—and 16,021 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -95,6 +95,11 @@ cobordisms:
   boundary, proves compactness and the pushout universal property, and checks
   collar-zero and orientation cancellation on the seam. No smooth structure
   on the pushout is asserted.
+- `Cob2GeometricHausdorffGluing.lean` identifies the canonical map from the
+  disjoint union of the two compact surface carriers as a quotient map,
+  proves its kernel relation closed, and deduces that the glued carrier is
+  Hausdorff. Second countability, local Euclidean structure, smooth
+  compatibility, and geometric composition remain open.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -145,6 +150,7 @@ cobordisms:
 | `RequestProject/Cob2GeometricCylinder.lean` | Smooth embedded endpoint parametrization and packaged boundary-parametrized cylinder cobordism |
 | `RequestProject/Cob2GeometricBoundaryCollar.lean` | Boundary homeomorphism, smooth collar data, boundary-neighborhood theorem, and oriented incoming/outgoing compatibility |
 | `RequestProject/Cob2GeometricTopologicalGluing.lean` | Compact topological pushout, exact seam identifications, outer boundary, universal descent, and collar/orientation seam compatibility |
+| `RequestProject/Cob2GeometricHausdorffGluing.lean` | Closed-kernel quotient theorem and Hausdorffness of the compact topological gluing carrier |
 
 ## Headline results
 
@@ -193,7 +199,8 @@ cobordisms:
   Two such compatible pieces have a canonical compact topological pushout:
   the piece maps and unglued outer boundary are injective, and a left point
   equals a right point exactly when both come from the same parametrized seam
-  point.
+  point. The canonical map from the disjoint union is a quotient map with
+  closed kernel relation, so the glued carrier is Hausdorff.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -220,14 +227,15 @@ cobordisms:
   homeomorphism, bundled smooth collar data, and an explicit
   reversed-incoming/retained-outgoing orientation-compatibility predicate. It
   also has the compact topological pushout of two chosen-collared pieces, with
-  exact control of its seam and outer-boundary identifications. It does not
+  exact control of its seam and outer-boundary identifications, and the
+  pushout is proved Hausdorff. It does not
   equip the boundary subtype or pushout with the missing smooth-manifold
   structure, prove that every surface admits the bundled collar, construct a
-  collar for the cylinder, prove Hausdorffness or local Euclidean structure
-  of the pushout, provide smooth gluing, prove the cylinder is an identity for
-  a composition law, form a diffeomorphism quotient or geometric bordism
-  category, classify surfaces, or compare the geometric source with the
-  algebraic source.
+  collar for the cylinder, prove second countability or local Euclidean
+  structure of the pushout, provide smooth gluing, prove the cylinder is an
+  identity for a composition law, form a diffeomorphism quotient or geometric
+  bordism category, classify surfaces, or compare the geometric source with
+  the algebraic source.
 - The diagonal model is a finite-state Frobenius toy theory, not the conventional
   finite-group Dijkgraaf-Witten state-sum construction.
 - The ordinary-shadow bridge is conditional data and reconstruction. It does
@@ -255,9 +263,9 @@ requests to `main`.
 2. Prove the interval affine-map smooth/local-diffeomorphism lemmas needed for
    an explicit two-ended collar of the verified cylinder, then investigate
    collar existence beyond the bundled-data interface.
-3. Upgrade the verified compact topological seam pushout to a Hausdorff,
-   second-countable smooth surface with boundary using the chosen compatible
-   collars; prove the verified cylinder is an identity, then define
+3. Upgrade the verified compact Hausdorff seam pushout to a second-countable
+   smooth surface with boundary using the chosen compatible collars; prove
+   the verified cylinder is an identity, then define
    composition up to diffeomorphism and symmetric disjoint union for a
    geometric oriented `2Cob`, then prove its comparison with the
    algebraic/combinatorial source.
