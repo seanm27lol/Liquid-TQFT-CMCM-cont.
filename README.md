@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 44 Lean source files—43 under `RequestProject`
-plus `Ribbon.lean`—and 16,153 lines, with no executable proof-admission
+**Proof-placeholder-free.** 46 Lean source files—45 under `RequestProject`
+plus `Ribbon.lean`—and 17,144 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -86,8 +86,12 @@ cobordisms:
   genuine smooth collar-neighborhood data, proves that a collar image
   contains a neighborhood of each boundary point, and freezes the
   boundary-first/inward-normal convention with reversed incoming and retained
-  outgoing orientations. Collar existence and an explicit cylinder collar
-  are not asserted.
+  outgoing orientations. General collar existence is not asserted.
+- `Cob2GeometricCylinderCollar.lean` constructs an explicit smooth two-ended
+  collar of the verified cylinder, using disjoint one-third neighborhoods of
+  its incoming and outgoing boundaries, and proves embedding and local-
+  diffeomorphism conditions with explicit partial inverses. The separate
+  oriented-collar compatibility theorem is not yet supplied.
 - `Cob2GeometricTopologicalGluing.lean` glues two chosen-collared oriented
   cobordisms along their common parametrized boundary by a `TopCat` pushout.
   It proves injectivity of both piece maps, characterizes every cross-piece
@@ -102,8 +106,12 @@ cobordisms:
 - `Cob2GeometricSecondCountableGluing.lean` proves that a continuous
   surjection from a compact second-countable space to a Hausdorff space has a
   countable basis, then applies this theorem to the canonical gluing quotient.
-  Local Euclidean structure, smooth compatibility, and geometric composition
-  remain open.
+- `Cob2GeometricLocalEuclideanGluing.lean` joins the two chosen half-collars
+  into an embedded signed seam collar, transports charts through the piece
+  inclusions off the seam, covers every pushout point, and constructs a
+  `SurfaceModelSpace` charted space with an `IsManifold surfaceModel 0`
+  theorem. Smooth transition compatibility and geometric composition remain
+  open.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -153,9 +161,11 @@ cobordisms:
 | `RequestProject/Cob2OrientedGeometricPrelude.lean` | Locally compatible tangent orientations, reversal, diffeomorphism preservation, and oriented carriers |
 | `RequestProject/Cob2GeometricCylinder.lean` | Smooth embedded endpoint parametrization and packaged boundary-parametrized cylinder cobordism |
 | `RequestProject/Cob2GeometricBoundaryCollar.lean` | Boundary homeomorphism, smooth collar data, boundary-neighborhood theorem, and oriented incoming/outgoing compatibility |
+| `RequestProject/Cob2GeometricCylinderCollar.lean` | Explicit two-ended cylinder collar, embedding, and local-diffeomorphism witnesses |
 | `RequestProject/Cob2GeometricTopologicalGluing.lean` | Compact topological pushout, exact seam identifications, outer boundary, universal descent, and collar/orientation seam compatibility |
 | `RequestProject/Cob2GeometricHausdorffGluing.lean` | Closed-kernel quotient theorem and Hausdorffness of the compact topological gluing carrier |
 | `RequestProject/Cob2GeometricSecondCountableGluing.lean` | Countable-basis descent along compact Hausdorff quotients and second countability of the gluing carrier |
+| `RequestProject/Cob2GeometricLocalEuclideanGluing.lean` | Signed seam collar, covering local charts, and C⁰ manifold-with-corners structure on the gluing carrier |
 
 ## Headline results
 
@@ -201,12 +211,17 @@ cobordisms:
   also a homeomorphism onto the boundary subtype; a chosen smooth collar is a
   genuine boundary neighborhood, and its differential can be required to
   implement the reversed-incoming/retained-outgoing orientation convention.
+  The cylinder now has an explicit smooth two-ended collar with disjoint
+  incoming and outgoing images and verified local partial inverses.
   Two such compatible pieces have a canonical compact topological pushout:
   the piece maps and unglued outer boundary are injective, and a left point
   equals a right point exactly when both come from the same parametrized seam
   point. The canonical map from the disjoint union is a quotient map with
   closed kernel relation, so the glued carrier is Hausdorff; compact-fiber
-  descent of a countable basis also proves that it is second countable.
+  descent of a countable basis also proves that it is second countable. A
+  signed seam collar and transported off-seam charts cover the carrier and
+  give it a `SurfaceModelSpace` charted structure satisfying the C⁰
+  manifold-with-corners condition.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
@@ -232,13 +247,15 @@ cobordisms:
   verified boundary-parametrized cylinder, a topological boundary
   homeomorphism, bundled smooth collar data, and an explicit
   reversed-incoming/retained-outgoing orientation-compatibility predicate. It
+  includes an explicit two-ended collar of the verified cylinder, but does
+  not yet prove that collar satisfies the separate orientation predicate. It
   also has the compact topological pushout of two chosen-collared pieces, with
   exact control of its seam and outer-boundary identifications, and the
-  pushout is proved Hausdorff and second countable. It does not
-  equip the boundary subtype or pushout with the missing smooth-manifold
-  structure, prove that every surface admits the bundled collar, construct a
-  collar for the cylinder, prove local Euclidean structure of the pushout,
-  provide smooth gluing, prove the cylinder is an identity for a composition
+  pushout is proved Hausdorff and second countable and equipped with covering
+  C⁰ surface charts. It does not prove that the new atlas has smooth
+  transitions or is smoothly compatible with the original piece atlases,
+  prove that every surface admits the bundled collar, provide smooth gluing,
+  prove the cylinder is an identity for a composition
   law, form a diffeomorphism quotient or geometric bordism category, classify
   surfaces, or compare the geometric source with the algebraic source.
 - The diagonal model is a finite-state Frobenius toy theory, not the conventional
@@ -265,12 +282,13 @@ requests to `main`.
 1. Prove representation independence for finite boundary permutations and an
    arbitrary-word normal-form/completeness theorem, then determine whether the
    strong braided surface-signature functor is an equivalence.
-2. Prove the interval affine-map smooth/local-diffeomorphism lemmas needed for
-   an explicit two-ended collar of the verified cylinder, then investigate
-   collar existence beyond the bundled-data interface.
-3. Upgrade the verified compact Hausdorff second-countable seam pushout to a
-   smooth surface with boundary using the chosen compatible collars; prove
-   the verified cylinder is an identity, then define
+2. Prove orientation compatibility for the explicit two-ended cylinder
+   collar, package the oriented cylinder as chosen-collared data, and then
+   investigate collar existence beyond the bundled-data interface.
+3. Upgrade the verified compact Hausdorff second-countable C⁰ surface atlas on
+   the seam pushout to a smooth surface with boundary by proving transition
+   compatibility with the chosen collars; prove the verified cylinder is an
+   identity, then define
    composition up to diffeomorphism and symmetric disjoint union for a
    geometric oriented `2Cob`, then prove its comparison with the
    algebraic/combinatorial source.
