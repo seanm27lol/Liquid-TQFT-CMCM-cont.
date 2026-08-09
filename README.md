@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 46 Lean source files—45 under `RequestProject`
-plus `Ribbon.lean`—and 17,144 lines, with no executable proof-admission
+**Proof-placeholder-free.** 47 Lean source files—46 under `RequestProject`
+plus `Ribbon.lean`—and 17,195 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -26,6 +26,9 @@ cobordisms:
 - `Cob2Spider.lean`, `Cob2Permutation.lean`, and
   `Cob2BoundaryPermutations.lean` establish the ordered connected-spider
   composition law and the basic boundary transpositions.
+- `Cob2TraceClosure.lean` writes the Frobenius self-pairing closure of an
+  ordered handle in cup--endomorphism--braid--cap form and proves that it is
+  the closed connected spider with one additional handle.
 - `Cob2SpiderPermutations.lean`, `Cob2SpiderPermutationWords.lean`,
   `Cob2SpiderPermutationInvariance.lean`, and
   `Cob2FinitePermutationWords.lean` extend absorption to every adjacent
@@ -132,6 +135,7 @@ cobordisms:
 | `RequestProject/Cob2Symmetric.lean` | Symmetric quotient and strong braided monoidal interpretation |
 | `RequestProject/Cob2Canonical.lean` | Canonical source Frobenius datum and braided identity reconstruction |
 | `RequestProject/Cob2Spider.lean` | Ordered connected spiders and their positive-boundary composition law |
+| `RequestProject/Cob2TraceClosure.lean` | Frobenius trace closure of an ordered handle and its one-handle genus shift |
 | `RequestProject/Cob2Permutation.lean` | First-two-wire invariance of ordered merge and split combs |
 | `RequestProject/Cob2BoundaryPermutations.lean` | Arbitrary-position adjacent boundary transpositions and involutivity |
 | `RequestProject/Cob2SpiderPermutations.lean` | Absorption of an adjacent transposition at every boundary position |
@@ -184,7 +188,9 @@ cobordisms:
   `g + (b - 1) + h` across a positive boundary of arity `b`. The same formula
   is verified for the finite multigraph composition of connected
   component-and-genus codes, and the generic Euler bound proves that its
-  cycle-rank subtraction is nontruncated.
+  cycle-rank subtraction is nontruncated. Closing the canonical handle
+  endomorphism through its Frobenius self-pairing produces the closed
+  connected spider with one additional handle.
 - Every finite permutation of a boundary `Fin n` has a represented adjacent-
   swap word, and a chosen representative is absorbed on either or both sides
   of every ordered connected spider.
