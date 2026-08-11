@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 48 Lean source files—47 under `RequestProject`
-plus `Ribbon.lean`—and 17,288 lines, with no executable proof-admission
+**Proof-placeholder-free.** 49 Lean source files—48 under `RequestProject`
+plus `Ribbon.lean`—and 17,414 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -119,6 +119,10 @@ cobordisms:
   `SurfaceModelSpace` charted space with an `IsManifold surfaceModel 0`
   theorem. Smooth transition compatibility and geometric composition remain
   open.
+- `Cob2GeometricSeamOrientation.lean` proves that the normal reflection in a
+  signed seam chart reconciles the opposite boundary-first orientations of
+  two composable collars. It does not construct the missing smooth atlas or
+  a global orientation on the glued carrier.
 - `Ribbon.lean` now proves both tensor-pairing triangle identities and quantum
   dimension multiplicativity, as well as quantum-trace cyclicity and symmetry
   of the S-pairing.
@@ -175,6 +179,7 @@ cobordisms:
 | `RequestProject/Cob2GeometricHausdorffGluing.lean` | Closed-kernel quotient theorem and Hausdorffness of the compact topological gluing carrier |
 | `RequestProject/Cob2GeometricSecondCountableGluing.lean` | Countable-basis descent along compact Hausdorff quotients and second countability of the gluing carrier |
 | `RequestProject/Cob2GeometricLocalEuclideanGluing.lean` | Signed seam collar, covering local charts, and C⁰ manifold-with-corners structure on the gluing carrier |
+| `RequestProject/Cob2GeometricSeamOrientation.lean` | Determinant and boundary-first orientation compatibility for normal reflection across a composable seam |
 
 ## Headline results
 
@@ -234,7 +239,10 @@ cobordisms:
   descent of a countable basis also proves that it is second countable. A
   signed seam collar and transported off-seam charts cover the carrier and
   give it a `SurfaceModelSpace` charted structure satisfying the C⁰
-  manifold-with-corners condition.
+  manifold-with-corners condition. On the tangent model, reflecting the
+  inward-normal coordinate reconciles the two boundary-first orientations at
+  every composable seam; smooth chart compatibility and a global glued
+  orientation are still not asserted.
 - In every ribbon category, quantum dimension is multiplicative under tensor
   product and the S-pairing is symmetric.
 
