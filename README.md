@@ -8,8 +8,8 @@ substrate, and the ribbon-category input layer in one build.
 
 ## Status
 
-**Proof-placeholder-free.** 47 Lean source files—46 under `RequestProject`
-plus `Ribbon.lean`—and 17,195 lines, with no executable proof-admission
+**Proof-placeholder-free.** 48 Lean source files—47 under `RequestProject`
+plus `Ribbon.lean`—and 17,288 lines, with no executable proof-admission
 placeholders and no custom axioms. Every listed formal result is
 machine-checked.
 
@@ -29,6 +29,10 @@ cobordisms:
 - `Cob2TraceClosure.lean` writes the Frobenius self-pairing closure of an
   ordered handle in cup--endomorphism--braid--cap form and proves that it is
   the closed connected spider with one additional handle.
+- `Cob2PairClosure.lean` proves that sewing the Frobenius cup to both inputs or
+  the Frobenius cap to both outputs of an ordered connected spider creates one
+  handle, that closing both pairs creates two, and that the two one-sided
+  closed presentations agree with the trace-shaped handle closure.
 - `Cob2SpiderPermutations.lean`, `Cob2SpiderPermutationWords.lean`,
   `Cob2SpiderPermutationInvariance.lean`, and
   `Cob2FinitePermutationWords.lean` extend absorption to every adjacent
@@ -136,6 +140,7 @@ cobordisms:
 | `RequestProject/Cob2Canonical.lean` | Canonical source Frobenius datum and braided identity reconstruction |
 | `RequestProject/Cob2Spider.lean` | Ordered connected spiders and their positive-boundary composition law |
 | `RequestProject/Cob2TraceClosure.lean` | Frobenius trace closure of an ordered handle and its one-handle genus shift |
+| `RequestProject/Cob2PairClosure.lean` | Input, output, and two-sided Frobenius pair closures for connected spiders |
 | `RequestProject/Cob2Permutation.lean` | First-two-wire invariance of ordered merge and split combs |
 | `RequestProject/Cob2BoundaryPermutations.lean` | Arbitrary-position adjacent boundary transpositions and involutivity |
 | `RequestProject/Cob2SpiderPermutations.lean` | Absorption of an adjacent transposition at every boundary position |
@@ -190,7 +195,9 @@ cobordisms:
   component-and-genus codes, and the generic Euler bound proves that its
   cycle-rank subtraction is nontruncated. Closing the canonical handle
   endomorphism through its Frobenius self-pairing produces the closed
-  connected spider with one additional handle.
+  connected spider with one additional handle. More generally, attaching the
+  Frobenius cup to both inputs or the Frobenius cap to both outputs of a
+  connected spider raises its genus by one; doing both raises it by two.
 - Every finite permutation of a boundary `Fin n` has a represented adjacent-
   swap word, and a chosen representative is absorbed on either or both sides
   of every ordered connected spider.
